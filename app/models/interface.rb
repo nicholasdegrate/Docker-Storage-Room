@@ -1,7 +1,10 @@
 class Interface
 
     attr_reader :prompt
-    attr_accessor :user, :current_name
+
+    # storing current state
+    $current_name = nil
+
     def initialize
         @prompt = TTY::Prompt.new
     end
@@ -15,7 +18,17 @@ class Interface
     end
 
     def show_players
+        # potiental issue rake db:seed
        puts Player.all.map(&:name).flatten
+
+       # returns guest to main screen    
+       if $current_name == nil
+            sleep(3)
+            main_screen
+       else
+            # current user using the platform
+            main_screen_login
+       end
     end
 
     def user_sign_up
@@ -27,22 +40,23 @@ class Interface
         user_sign_up could be simpified by using find_or_create_by
 =end
 
-        name = prompt.ask("what is your username?").downcase
+        name = prompt.ask("what is your username?", require: true).downcase
         if RenameCreateUser.find_by(name: name)
             # assigning the state
-            self.current_name = RenameCreateUser.find_by(name: name)
+           $current_name = RenameCreateUser.find_by(name: name)
         else
-            while !RenameCreateUser.find_by(name: name)
-                pp "user does not exist"
-                name = prompt.ask("what is your username?").downcase
+            # runs if it doesn't exist'
+            while RenameCreateUser.find_by(name: name)
+                pp "Hello #{name}, re-enter name to create username:"
+                name = prompt.ask("what is your username?", require: true).downcase
                 break
             end
-            self.user = RenameCreateUser.create(name: name)
-            pp "Hello #{user.name}"
+            $current_name = RenameCreateUser.create(name: name)
         end
-        main_screen
+        main_screen_login
     end 
 
+    # guest main
     def main_screen
         system "clear"
 
@@ -53,25 +67,45 @@ class Interface
     ERROR: 
     rake aborted!
     NoMethodError: undefined method `reload' for nil:NilClass
-    /Users/nicholasdegrate/Desktop/flatironschool/projects/storage-app/Ruby-CLI-Setup/app/models/interface.rb:51:in `main_screen'
-    /Users/nicholasdegrate/Desktop/flatironschool/projects/storage-app/Ruby-CLI-Setup/app/models/interface.rb:46:in `user_sign_up'
-    /Users/nicholasdegrate/Desktop/flatironschool/projects/storage-app/Ruby-CLI-Setup/app/models/interface.rb:12:in `block (2 levels) in welcome'
-    /Users/nicholasdegrate/Desktop/flatironschool/projects/storage-app/Ruby-CLI-Setup/app/models/interface.rb:10:in `welcome'
-    /Users/nicholasdegrate/Desktop/flatironschool/projects/storage-app/Ruby-CLI-Setup/app/NBATODAY.rb:17:in `welcome'
-    /Users/nicholasdegrate/Desktop/flatironschool/projects/storage-app/Ruby-CLI-Setup/app/NBATODAY.rb:6:in `run'
-    /Users/nicholasdegrate/Desktop/flatironschool/projects/storage-app/Ruby-CLI-Setup/Rakefile:16:in `block in <top (required)>'
-    Tasks: TOP => start
-    (See full trace by running task with --trace)
 
 =end
 
         sleep(0.5)
 
         prompt.select("Welcome to NBA Today") do |menu|
-            menu.choice "See all players", -> {show_players} 
+            # favorite players basec on current user
+            menu.choice "see favorite players", -> {show_players} 
             menu.choice "Sign up or Login", -> {user_sign_up}
             menu.choice "Exit", -> { exit_helper }
         end
     end
 
+    # check if the user is signed in
+    def main_screen_login
+        system "clear"
+
+        sleep(0.5)
+
+        prompt.select("Welcome to NBA Today #{$current_name.name.capitalize}") do |menu|
+            # favorite players basec on current user
+            menu.choice "see favorite players", -> {favorite_player} 
+            menu.choice "add to favorite players", -> {user_sign_up}
+            menu.choice "Delete favorite players", -> {user_sign_up}
+            menu.choice "exit", -> { exit_helper }
+        end
+    end
+
+
+
+    def exit_helper
+        pp 'goodbye'
+    end
+
+
+    def favorite_player
+        if $current_name == RenameCreateUser.find_by(name: $current_name.name)
+            
+        end
+    end
+    
 end
