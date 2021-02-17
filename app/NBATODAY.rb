@@ -13,7 +13,8 @@ class NBATODAY
   private
 
   def welcome
-    puts "Welcome"
+    interface = Interface.new
+    interface.welcome
   end
   
 
