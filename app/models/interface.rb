@@ -19,16 +19,27 @@ class Interface
 
     def show_players
         # potiental issue rake db:seed
-       puts Player.all.map(&:name).flatten
-
+        # puts Player.all.map(&:name).flatten
+        prompt.select("Choose a player") do |menu|
+            Player.all.each do |p|
+                menu.choice "#{p.name}", -> { players_stats(p.id) }
+            end
+        end
        # returns guest to main screen    
-       if $current_name == nil
-            sleep(3)
-            main_screen
-       else
-            # current user using the platform
-            main_screen_login
-       end
+    #    if $current_name == nil
+    #         sleep(3)
+    #         main_screen
+    #    else
+    #         # current user using the platform
+    #         main_screen_login
+    #    end
+    end
+
+
+    def players_stats(id)
+        pp Player.find(id).position
+        sleep(2)
+        main_screen
     end
 
     def user_sign_up
@@ -46,7 +57,7 @@ class Interface
            $current_name = RenameCreateUser.find_by(name: name)
         else
             # runs if it doesn't exist'
-            while RenameCreateUser.find_by(name: name)
+            while !RenameCreateUser.find_by(name: name)
                 pp "Hello #{name}, re-enter name to create username:"
                 name = prompt.ask("what is your username?", require: true).downcase
                 break
@@ -88,14 +99,38 @@ class Interface
 
         prompt.select("Welcome to NBA Today #{$current_name.name.capitalize}") do |menu|
             # favorite players basec on current user
-            menu.choice "see favorite players", -> {favorite_player} 
-            menu.choice "add to favorite players", -> {user_sign_up}
-            menu.choice "Delete favorite players", -> {user_sign_up}
+            menu.choice "continue NBA Today", -> {continue} 
+            menu.choice "Update Account", -> {update_account}
+            menu.choice "Delete Account", -> {delete_account}
             menu.choice "exit", -> { exit_helper }
         end
     end
 
 
+    def update_account
+        name = prompt.ask("update your name?", require: true).downcase
+        $current_name.update(name: name)
+        puts "Hello #{$current_name.name}"
+    end
+
+    def delete_account
+        $current_name.destroy
+        main_screen
+    end
+
+    def continue
+        system "clear"
+
+        sleep(0.5)
+
+        prompt.select("Welcome to NBA Today #{$current_name.name.capitalize}") do |menu|
+            # favorite players basec on current user
+            menu.choice "Delete Favorite Player", -> {continue} 
+            menu.choice "Favorite Player", -> {update_account}
+            menu.choice "Delete Account", -> {delete_account}
+            menu.choice "exit", -> { exit_helper }
+        end 
+    end
 
     def exit_helper
         pp 'goodbye'
@@ -103,9 +138,10 @@ class Interface
 
 
     def favorite_player
+
+        binding.pry
         if $current_name == RenameCreateUser.find_by(name: $current_name.name)
             
         end
     end
-    
 end

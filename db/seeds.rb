@@ -35,6 +35,7 @@ end
         mvp: 0,
     )
 end
+
 5.times do
 
     rand_points =rand(5..45)
