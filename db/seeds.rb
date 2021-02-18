@@ -1,4 +1,5 @@
 require 'faker'
+require_relative '../config/.api'
 
 Team.destroy_all
 Player.destroy_all
@@ -12,29 +13,49 @@ Game.reset_pk_sequence
 
 Faker::UniqueGenerator.clear
 
+
+50.times do
+    RenameCreateUser.create(
+        name: Faker::Name.unique.name
+    )
+end
+
 30.times do
     Team.create(
         name:Faker::Sports::Basketball.unique.team,
         team_year: Time.now.strftime("%Y")
     )
 end
-10.times do
-    rad_team = rand(1..30)
-    rand_jersey = rand(1..99)
-    rand_shoes = rand(8..16)
-    Player.create(
-        name: Faker::Sports::Basketball.unique.player,
-        jersey_number: rand_jersey,
-        shoe_size: rand_shoes,
-        dob: 2000,
-        championship: 0,
-        team_id: rad_team,
-        manager_id: 1,
-        game_id: 1 ,
-        position: Faker::Sports::Basketball.position,
-        mvp: 0,
-    )
+
+def request_api(subject)
+    url = URI("https://free-nba.p.rapidapi.com/#{subject}?page=0&per_page=50")
+
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Get.new(url)
+
+    request["x-rapidapi-key"] = $api_key
+    request["x-rapidapi-host"] = $api_url
+
+    response = http.request(request)
+    parsed = JSON.parse(response.read_body)
+    
+    parsed['data'].map { |hash| hash}
 end
+
+players = request_api('players')
+
+players.map { |hash|
+    Player.create(
+        name: hash['first_name'],
+        position: hash['position'],
+        team_id: hash['team']['id'],
+        user_id: rand(1..50)
+    )
+}
 
 5.times do
 
@@ -46,8 +67,8 @@ end
     PlayerGame.create(
         points: rand_points,
         player_id: rand_player_id,
-        game_id: 1,
         wins: rand_wins,
+        game_id: 1,
         losses: rand_losses
     )
 end
