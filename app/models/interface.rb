@@ -25,10 +25,6 @@ class Interface
         end
     end
 
-    def unique_teams 
-        unique_team = []
-        Player.all[0]
-    end
     def team_stats(id)
         pp Team.find(id).name
         sleep(5)
