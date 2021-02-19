@@ -53,7 +53,8 @@ stats.map { |hash|
         name: "#{hash['player']['first_name']} #{hash['player']['last_name']}",
         position: position_not_found,
         team_id: hash['team']['id'],
-        user_id: user_id
+        user_id: user_id,
+        stats: "[ast #{hash['ast']}] [pts #{hash['pts']}] [reb #{hash['reb']}] [stl #{hash['stl']}] [weight #{hash['player']['weight_pounds']}] [position #{hash['player']['position']}] [team #{hash['team']['full_name']}]"
     )
 }
 
@@ -64,7 +65,7 @@ stats.map { |hash|
     DONE
 =end
 
-players.map { |hash|
+stats.map { |hash|
     Team.create(
         name: hash["team"]["full_name"],
         team_year: Time.now.strftime("%Y")
@@ -73,27 +74,24 @@ players.map { |hash|
 =begin 
 
 =end
-5.times do
 
-    rand_points =rand(5..45)
-    rand_player_id = rand(1..3)
-    rand_wins = rand(0..1)
-    rand_losses = rand(0..1)
-    
+stats.map { |hash| 
+
     PlayerGame.create(
-        points: rand_points,
-        player_id: rand_player_id,
-        wins: rand_wins,
-        game_id: 1,
-        losses: rand_losses
+        points: hash['game']['home_team_score'].to_i + hash['game']['visitor_team_score'].to_i,
+        player_id: hash['player']['id'],
+        wins: hash['game']['home_team_score'].to_i,
+        losses: hash['game']['visitor_team_score'].to_i, 
     )
-end
+}
 
-30.times do
-    Game.create(
-        win_or_lost: false,
+stats.map { |hash|
+    win_or_lost = if hash['game']['home_team_score'].to_i < hash['game']['visitor_team_score'].to_i then false else true end
+
+    Game.create( 
+        win_or_lost: win_or_lost
     )
-end
+}
 
 
 puts "🔥 🔥 🔥 🔥 "

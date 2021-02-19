@@ -27,8 +27,8 @@ class Interface
 
 
     def players_stats(id)
-        pp Player.find(id).position
-        sleep(2)
+        pp Player.find(id).stats.to_a
+        sleep(5)
         main_screen
     end
 
@@ -129,9 +129,7 @@ class Interface
     def favorite_players
         # users
         # favorite_player
-        Player.all.select { |v| 
-            if v.user_id  
-        }
+    
     end
   
 end

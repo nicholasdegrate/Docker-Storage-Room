@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_18_201543) do
+ActiveRecord::Schema.define(version: 2021_02_19_022537) do
 
   create_table "games", force: :cascade do |t|
     t.boolean "win_or_lost"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2021_02_18_201543) do
     t.string "position"
     t.string "name"
     t.integer "user_id"
+    t.text "stats"
   end
 
   create_table "rename_create_users", force: :cascade do |t|
