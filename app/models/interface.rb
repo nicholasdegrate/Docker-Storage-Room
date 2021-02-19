@@ -45,7 +45,7 @@ class Interface
             end
         end
 
-        sleep(20)
+        sleep(4)
         main_screen
     end
 
@@ -147,6 +147,7 @@ class Interface
             end
         end
     end
+    
     def exit_helper
         pp 'goodbye'
     end

@@ -24,7 +24,7 @@ stats = RequestApi.request_api('stats')
 
     DONE
 =end
-50.times do
+70.times do
     RenameCreateUser.create(
         name: Faker::Name.unique.name
     )
