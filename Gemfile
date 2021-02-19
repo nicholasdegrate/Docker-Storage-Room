@@ -10,3 +10,8 @@ gem "pry"
 gem 'faker', :git => 'https://github.com/stympy/faker.git'
 gem "colorize"
 gem 'activerecord-reset-pk-sequence'
+gem "tty-prompt"
+gem 'uri'
+gem 'openssl'
+gem 'net-http'
+gem 'json', '~> 2.5', '>= 2.5.1'
