@@ -7,7 +7,7 @@ require_relative '../../config/.api'
 class RequestApi
 
     def self.request_api(subject)
-        url = URI("https://free-nba.p.rapidapi.com/#{subject}?page=0&per_page=50")
+        url = URI("https://free-nba.p.rapidapi.com/#{subject}?page=0&per_page=150")
 
 
         http = Net::HTTP.new(url.host, url.port)

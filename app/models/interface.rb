@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Interface
 
     attr_reader :prompt
@@ -27,8 +29,20 @@ class Interface
 
 
     def players_stats(id)
-        pp Player.find(id).stats.to_a
-        sleep(5)
+        new_stats = Player.find(id).stats.scan(/'(.+?)'|"(.+?)"|([^ ]+)/).flatten.compact
+        
+        count = 0
+        
+        for i in (0..new_stats.count) do
+            count += 1
+            if count === 2
+                count = 0
+                slice_it = new_stats.slice!(0,2)
+                pp '- ' + slice_it.join(', ')
+            end
+        end
+
+        sleep(20)
         main_screen
     end
 

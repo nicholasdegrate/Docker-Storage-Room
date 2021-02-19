@@ -19,7 +19,6 @@ Faker::UniqueGenerator.clear
         FETCH: players, players info, teams
 =end
 stats = RequestApi.request_api('stats')
-
 =begin 
     create random users
 
@@ -54,7 +53,7 @@ stats.map { |hash|
         position: position_not_found,
         team_id: hash['team']['id'],
         user_id: user_id,
-        stats: "[ast #{hash['ast']}] [pts #{hash['pts']}] [reb #{hash['reb']}] [stl #{hash['stl']}] [weight #{hash['player']['weight_pounds']}] [position #{hash['player']['position']}] [team #{hash['team']['full_name']}]"
+        stats: "ast #{hash['ast']} pts #{hash['pts']} reb #{hash['reb']} stl #{hash['stl']} weight #{hash['player']['weight_pounds']} position #{hash['player']['position']} team #{hash['team']['full_name']}"
     )
 }
 
