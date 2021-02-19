@@ -26,10 +26,18 @@ GEM
     concurrent-ruby (1.1.8)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
+    json (2.5.1)
     method_source (1.0.0)
     minitest (5.14.3)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    net-http (0.1.1)
+      net-protocol
+      uri
+    net-protocol (0.1.0)
+    openssl (2.2.0)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
     pry (0.14.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -50,8 +58,20 @@ GEM
     sqlite3 (1.4.2)
     thread_safe (0.3.6)
     tilt (2.0.10)
+    tty-color (0.6.0)
+    tty-cursor (0.7.1)
+    tty-prompt (0.23.0)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.1)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
+    uri (0.10.1)
+    wisper (2.0.1)
 
 PLATFORMS
   x86_64-darwin-19
@@ -61,11 +81,16 @@ DEPENDENCIES
   activerecord-reset-pk-sequence
   colorize
   faker!
+  json (~> 2.5, >= 2.5.1)
+  net-http
+  openssl
   pry
   rake
   require_all
   sinatra-activerecord
   sqlite3
+  tty-prompt
+  uri
 
 BUNDLED WITH
    2.2.9

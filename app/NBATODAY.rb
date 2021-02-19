@@ -3,14 +3,15 @@ class NBATODAY
   # it is not an AR class so you need to add attr
 
   def run
-    # welcome
-    # login_or_signup
-    # wanna_see_favs?
-    # some_method(some_argument)
-    # exit
+    welcome
   end
 
   private
 
+  def welcome
+    interface = Interface.new
+    interface.welcome
+  end
   
+
 end

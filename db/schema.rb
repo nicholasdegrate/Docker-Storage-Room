@@ -10,12 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_004216) do
+ActiveRecord::Schema.define(version: 2021_02_19_022537) do
 
   create_table "games", force: :cascade do |t|
     t.boolean "win_or_lost"
-    t.integer "player_id"
-    t.integer "player_game_id"
   end
 
   create_table "player_games", force: :cascade do |t|
@@ -27,16 +25,17 @@ ActiveRecord::Schema.define(version: 2021_02_17_004216) do
   end
 
   create_table "players", force: :cascade do |t|
-    t.integer "jersey_number"
-    t.integer "shoe_size"
-    t.integer "mvp"
-    t.datetime "dob"
-    t.integer "championship"
     t.integer "team_id"
-    t.integer "manager_id"
-    t.integer "game_id"
     t.string "position"
     t.string "name"
+    t.integer "user_id"
+    t.text "stats"
+  end
+
+  create_table "rename_create_users", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
