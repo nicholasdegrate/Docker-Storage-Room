@@ -1,5 +1,3 @@
-require 'yaml'
-
 class Interface
 
     attr_reader :prompt
@@ -27,6 +25,11 @@ class Interface
         end
     end
 
+    def team_stats(id)
+        pp Team.find(id).name
+        sleep(5)
+        continue
+    end
 
     def players_stats(id)
         new_stats = Player.find(id).stats.scan(/'(.+?)'|"(.+?)"|([^ ]+)/).flatten.compact
@@ -89,7 +92,7 @@ class Interface
 
         prompt.select("Welcome to NBA Today") do |menu|
             # favorite players basec on current user
-            menu.choice "see favorite players", -> {show_players} 
+            menu.choice "See all players", -> {show_players} 
             menu.choice "Sign up or Login", -> {user_sign_up}
             menu.choice "Exit", -> { exit_helper }
         end
@@ -115,6 +118,7 @@ class Interface
         name = prompt.ask("update your name?", require: true).downcase
         $current_name.update(name: name)
         puts "Hello #{$current_name.name}"
+        continue
     end
 
     def delete_account
@@ -129,13 +133,20 @@ class Interface
 
         prompt.select("Welcome to NBA Today #{$current_name.name.capitalize}") do |menu|
             # favorite players basec on current user
-            menu.choice "Delete Favorite Player", -> {continue} 
-            menu.choice "Favorite Player", -> {update_account}
-            menu.choice "Delete Account", -> {delete_account}
+            menu.choice "View teams", -> {view_team_helper} 
+            menu.choice "See all players", -> {show_players}
+            menu.choice "Update Account", -> {update_account}
             menu.choice "exit", -> { exit_helper }
         end 
     end
 
+    def view_team_helper
+        prompt.select("Choose a Team") do |menu|
+            Team.all.each do |p|
+                menu.choice "#{p.name}", -> { team_stats(p.id) }
+            end
+        end
+    end
     def exit_helper
         pp 'goodbye'
     end
