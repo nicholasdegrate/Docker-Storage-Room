@@ -140,10 +140,4 @@ class Interface
         pp 'goodbye'
     end
 
-    def favorite_players
-        # users
-        # favorite_player
-    
-    end
-  
 end
