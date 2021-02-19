@@ -18,21 +18,11 @@ class Interface
     end
 
     def show_players
-        # potiental issue rake db:seed
-        # puts Player.all.map(&:name).flatten
         prompt.select("Choose a player") do |menu|
             Player.all.each do |p|
                 menu.choice "#{p.name}", -> { players_stats(p.id) }
             end
         end
-       # returns guest to main screen    
-    #    if $current_name == nil
-    #         sleep(3)
-    #         main_screen
-    #    else
-    #         # current user using the platform
-    #         main_screen_login
-    #    end
     end
 
 
@@ -136,12 +126,12 @@ class Interface
         pp 'goodbye'
     end
 
-
-    def favorite_player
-
-        binding.pry
-        if $current_name == RenameCreateUser.find_by(name: $current_name.name)
-            
-        end
+    def favorite_players
+        # users
+        # favorite_player
+        Player.all.select { |v| 
+            if v.user_id  
+        }
     end
+  
 end
